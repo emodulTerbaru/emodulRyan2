@@ -18,12 +18,55 @@ mengeja=['Ini ru-mah-ku.',
         'A-ku se-nang di ru-mah.',
         'A-ku sa-yang ke-lu-arg-a-ku.'
         ]
-
+membaca=['Pagi hari cuaca cerah',
+        'Aku bangun tidur',
+        'Ibu sedang memasak di dapur',
+        'Aku mencium bau yang enak',
+        'Ibu tersenyum kepadaku',
+        'Ayah duduk di meja makan',
+        'Ayah sedang membaca koran',
+        'Kakak sedang mewarnai gambar',
+        'Aku duduk di samping kakak',
+        'Setiap pagi, ibu, ayah, aku dan kakak selalu makan pagi bersama',
+        'Aku senang hari ini',
+        'Aku sayang keluargaku di rumah',
+        ]
+animasi=['https://martin123-oke.github.io/pagihari/pagiHari.html',
+         'https://martin123-oke.github.io/pagihari/banguntidur.html',
+         'https://martin123-oke.github.io/pagihari/ibuMasak.html',
+         'https://martin123-oke.github.io/pagihari/menciumBau.html',
+         'https://martin123-oke.github.io/pagihari/ibuTersenyum.html',
+         'https://martin123-oke.github.io/pagihari/ayahDuduk.html',
+         'https://martin123-oke.github.io/pagihari/ayahMembaca.html',
+         'https://martin123-oke.github.io/pagihari/kakaGambar.html',
+         'https://martin123-oke.github.io/pagihari/adikKaka.html',
+         'https://martin123-oke.github.io/pagihari/makanPagi.html',
+         'https://martin123-oke.github.io/pagihari/akuSenang.html',
+         'https://martin123-oke.github.io/pagihari/keluargaKu1.html'
+         ]
 if 'kondisi' not in st.session_state:
     st.session_state.kondisi={'kondisi1':True,'kondisi2':False,'kondisi3':False, 'kondisi4':False, 'kondisi5':False}
 if 'halaman' not in st.session_state:
     st.session_state.halaman={'halaman1':True, 'halaman2':False, 'halaman3':False}
+if 'indeks' not in st.session_state:
+    st.session_state.indeks=0
 
+koding_css="""
+<style>
+    .kalimat{
+       font-size:20px;
+       font-family:"comic sans ms";
+       color:black;
+       background-color:pink;
+       border:2px solid green;
+       border-radius:10px;
+       width:300px;
+       text-align:center;
+       margin:10px;
+    }
+</style>
+"""
+st.markdown(koding_css,unsafe_allow_html=True)
 
 def halaman1():
     koding1='''
@@ -1054,7 +1097,6 @@ def halaman2():
         st.audio(audio_value1)
 
 def halaman3():
-    
     koding1='''
     <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -1185,23 +1227,43 @@ def halaman3():
         <div class="header">
             <h1>Keluargaku di Rumah</h1>
         </div>
-
     </body>
     '''
     st.markdown(koding1,unsafe_allow_html=True)
+    st.write("")
+    
+
+    for i in range(st.session_state.indeks):
+        st.markdown(f'''
+        <span class="kalimat">{membaca[i]}</span>
+        ''',unsafe_allow_html=True)
+
+    if st.session_state.indeks>0:
+        st.markdown(f"""<div style="border:2px solid white; width:400px; height:250px; overflow:hidden">
+        <iframe src={animasi[st.session_state.indeks-1]} style="width:800px; height:500px; transform:scale(0.5);transform-origin: top left;"></iframe>
+        </div>""",unsafe_allow_html=True)
+        st.markdown(text_to_speech(membaca[st.session_state.indeks-1]), unsafe_allow_html=True)
+    if st.button("Lanjutkan"):
+        st.session_state.indeks +=1
+    
+    
 if st.session_state.kondisi['kondisi1']:
     halaman1()
 if st.session_state.kondisi['kondisi2']:
     halaman2()
 if st.session_state.kondisi['kondisi3']:
     halaman3()
+
 with st.sidebar:
     if st.button("Halaman Depan"):
         st.session_state.kondisi={'kondisi1':True,'kondisi2':False,'kondisi3':False, 'kondisi4':False, 'kondisi5':False}
+        st.session_state.indeks=0
         st.rerun()
     if st.button("Mengeja Kalimat"):
         st.session_state.kondisi={'kondisi1':False,'kondisi2':True,'kondisi3':False, 'kondisi4':False, 'kondisi5':False}
+        st.session_state.indeks=0
         st.rerun()
     if st.button("Mambaca Kalimat"):
         st.session_state.kondisi={'kondisi1':False,'kondisi2':False,'kondisi3':True, 'kondisi4':False, 'kondisi5':False}
         st.rerun()
+
